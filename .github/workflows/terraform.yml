@@ -9,8 +9,8 @@ on:
 jobs:
   terraform-apply:
     runs-on: ubuntu-latest
+    environment: aws
     env: 
-      name: aws
       ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY_ID}}
       SECRET_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
       AWS_REGION: us-east-1
