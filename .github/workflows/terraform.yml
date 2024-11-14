@@ -43,7 +43,7 @@ jobs:
           
       - name: Teraform Checkov
         working-directory: Terraform
-        run: checkov -d
+        run: checkov -d .
         continue-on-error: true
 
       - name: Initialize Terraform
