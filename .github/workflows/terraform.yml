@@ -34,9 +34,9 @@ jobs:
 
       - name: Install Checkov
         run: |
-          pip3 install checkov
-          checkov --version
-
+          python3 -m pip install --upgrade pip
+          pip install --upgrade checkov
+          
       - name: Teraform Checkov
         working-directory: Terraform
         run: checkov -d
