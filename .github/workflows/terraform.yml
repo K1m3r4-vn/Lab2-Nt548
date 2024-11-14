@@ -38,25 +38,25 @@ jobs:
           checkov --version
 
       - name: Teraform Checkov
-        working-directory: Lab2-Nt548/Terraform
+        working-directory: Terraform
         run: checkov -d
 
       - name: Initialize Terraform
-        working-directory: Lab2-Nt548/Terraform
+        working-directory: Terraform
         run: terraform init
       
       - name: Validate Terraform
-        working-directory: Lab2-Nt548/Terraform
+        working-directory: Terraform
         run: terraform validate -no-color
 
       - name: Plan Terraform changes
-        working-directory: Lab2-Nt548/Terraform
+        working-directory: Terraform
         run: terraform plan -out=tfplan
         
       - name: Apply Terraform
-        working-directory: Lab2-Nt548/Terraform
+        working-directory: Terraform
         run: terraform apply --auto-approve
 
       - name: Clean up
-        working-directory: Lab2-Nt548/Terraform
+        working-directory: Terraform
         run: rm tfplan
