@@ -1,0 +1,61 @@
+name: Terraform Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  terraform-apply:
+    runs-on: ubuntu-latest
+    env:
+      ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY_ID}}
+      SECRET_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+      AWS_REGION: us-east-1
+      TF_VERSION: 1.9.6
+
+    steps:
+      - name: Checkout repository 
+        uses: actions/checkout@v3
+          
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ env.ACCESS_KEY }}
+          aws-secret-access-key: ${{ env.SECRET_KEY }}
+          aws-region: 'us-east-1'
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: ${{ env.TF_VERSION }}
+
+      - name: Install Checkov
+        run: |
+          pip3 install checkov
+          checkov --version
+
+      - name: Teraform Checkov
+        working-directory: Lab1_terraform/Terraform
+        run: checkov -d
+
+      - name: Initialize Terraform
+        working-directory: Lab1_terraform/Terraform
+        run: terraform init
+      
+      - name: Validate Terraform
+        working-directory: Lab1_terraform/Terraform
+        run: terraform validate -no-color
+
+      - name: Plan Terraform changes
+        working-directory: Lab1_terraform/Terraform
+        run: terraform plan -out=tfplan
+        
+      - name: Apply Terraform
+        working-directory: Lab1_terraform/Terraform
+        run: terraform apply --auto-approve
+
+      - name: Clean up
+        working-directory: Lab1_terraform/Terraform
+        run: rm tfplan
